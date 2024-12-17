@@ -33,30 +33,30 @@ export default function Register() {
             },
             body: JSON.stringify({ email, password }),
         })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
 
-                if (data.message === 'Registered Successfully') {
-                    // Save token or userId in localStorage
-                    localStorage.setItem('token', data.token); // Save the token
-                    localStorage.setItem('userId', data.userId); // Save userId
-                    setUser({ id: data.userId, email }); // Update user context
+            if (data.message === 'Registered Successfully') {
+                // Save token or userId in localStorage
+                localStorage.setItem('token', data.token); // Save the token
+                localStorage.setItem('userId', data.userId); // Save userId
+                setUser({ id: data.userId, email }); // Update user context
 
-                    // Clear form fields and navigate
-                    setEmail('');
-                    setPassword('');
-                    setConfirmPassword('');
-                    notyf.success(data.message);
-                    navigate('/');
-                } else {
-                    notyf.error('Registration failed. Please try again.');
-                }
-            })
-            .catch((err) => {
-                console.error('Error:', err);
-                notyf.error('Something went wrong. Please try again');
-            });
+                // Clear form fields and navigate
+                setEmail('');
+                setPassword('');
+                setConfirmPassword('');
+                notyf.success(data.message);
+                navigate('/');
+            } else {
+                notyf.error('Registration failed. Please try again.');
+            }
+        })
+        .catch((err) => {
+            console.error('Error:', err);
+            notyf.error('Something went wrong. Please try again');
+        });
     };
 
     if (user && user.id) {

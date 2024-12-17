@@ -17,6 +17,7 @@ function App() {
         id: null,
     });
 
+    // Function to unset the user, which clears localStorage and resets user state
     function unsetUser() {
         localStorage.clear();
         setUser({
@@ -24,6 +25,7 @@ function App() {
         });
     }
 
+    // Checking for the token in localStorage and setting the user accordingly
     useEffect(() => {
         const token = localStorage.getItem('token');
         console.log("Token from localStorage:", token);
@@ -35,8 +37,9 @@ function App() {
             return;
         }
 
+        // If the token exists, we set a dummy user ID or your actual user ID logic here
         setUser({
-            id: 'dummyUserId',
+            id: 'dummyUserId', // Replace this with actual user ID once you implement login
         });
     }, []);
 
@@ -46,12 +49,12 @@ function App() {
                 <AppNavbar />
                 <Container>
                     <Routes>
-                        <Route path="/Register" element={<Register />} />
                         <Route path="/" element={<Home />} />
-                        <Route path="/Login" element={<Login />} />
-                        <Route path="/AddWorkout" element={<AddWorkout />} />
-                        <Route path="/Workouts" element={<Workout />} />
-                        <Route path="/Logout" element={<Logout />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/addWorkout" element={<AddWorkout />} />
+                        <Route path="/workouts" element={<Workout />} />
+                        <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Container>
             </Router>

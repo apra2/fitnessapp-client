@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 
 export default function AddWorkout() {
     const [name, setName] = useState('');
     const [duration, setDuration] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -13,6 +14,7 @@ export default function AddWorkout() {
 
         // Clear any previous errors
         setError('');
+        setSuccess(false);
 
         // Validate inputs
         if (!name || !duration) {
@@ -20,12 +22,7 @@ export default function AddWorkout() {
             return;
         }
 
-        // Prepare the data to be sent
-        const workoutData = {
-            name: name,
-            duration: duration,
-        };
-
+        const workoutData = { name, duration };
         const token = localStorage.getItem('token');
 
         try {
@@ -39,9 +36,9 @@ export default function AddWorkout() {
             });
 
             if (response.ok) {
-                // Redirect to the workouts page or show a success message
-                alert('Workout added successfully');
-                navigate('/workouts');
+                setSuccess(true);
+                setError('');
+                setTimeout(() => navigate('/workouts'), 1000); // Delay navigation for 1 second
             } else {
                 const data = await response.json();
                 setError(data.message || 'Failed to add workout');
@@ -55,7 +52,13 @@ export default function AddWorkout() {
     return (
         <Container>
             <h2 className="my-4">Add Workout</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
+
+            {/* Display success message */}
+            {success && <Alert variant="success">Workout added successfully!</Alert>}
+
+            {/* Display error message */}
+            {error && <Alert variant="danger">{error}</Alert>}
+
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="workoutName">
                     <Form.Label>Workout Name</Form.Label>
@@ -64,6 +67,7 @@ export default function AddWorkout() {
                         placeholder="Enter workout name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        required
                     />
                 </Form.Group>
 
@@ -74,6 +78,7 @@ export default function AddWorkout() {
                         placeholder="Enter workout duration"
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
+                        required
                     />
                 </Form.Group>
 
